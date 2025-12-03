@@ -3,10 +3,10 @@ const fs = require('fs');
 const path = require('path');
 
 // --- Parse command line arguments ---
-const [,, day, part] = process.argv;
+const [,, day, part, ...flags] = process.argv;
 
 if (!day || !part) {
-  console.error("Usage: node run.js <day> <part>");
+  console.error("Usage: node run.js <day> <part> (--example-only)");
   process.exit(1);
 }
 
@@ -24,6 +24,9 @@ try {
 console.log(`Day ${day}, part ${part}`)
 
 for (const file of ['example', 'input']) {
+  if (flags.includes('--example-only') && file === 'input') {
+    continue;
+  }
     const input = fs.readFileSync(path.join(day, `${file}.txt`), 'utf8');
     const solution = solve(input.split("\n").map(line => line.trim()))
     console.log(`${file} solution: ${solution}`)
